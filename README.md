@@ -1,4 +1,4 @@
-# quaccProxyStore
+# Dask+ProxyStore
 
 ## Management Repo for testing Dask applications with ProxyStore.
 
