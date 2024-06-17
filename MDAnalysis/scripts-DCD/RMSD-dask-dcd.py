@@ -10,17 +10,24 @@ import time
 from shutil import copyfile
 import os
 import argparse
+import warnings
 
-def calculate_rmsd(mobile, ref0):
+# Suppress specific DeprecationWarning
+warnings.filterwarnings("ignore", category=DeprecationWarning,
+                        message="DCDReader currently makes independent timesteps")
+
+
+def calculate_rmsd(mobile, xref0):
     """Calculate RMSD using MDAnalysis' RMSD class."""
-    rmsd_calc = rms.RMSD(mobile, ref0)
+    mobile_positions = mobile.positions - mobile.center_of_mass()
+    rmsd_calc = rms.RMSD(mobile_positions, xref0)
     rmsd_calc.run()
     return rmsd_calc.results.rmsd[:, 2]  # returning the RMSD values
 
-def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=None, step=None):
+
+def block_rmsd(index, topology, trajectory, xref0, start=None, stop=None, step=None):
     clone = mda.Universe(topology, trajectory)
     g = clone.atoms[index]
-    ref0 = clone.select_atoms(ref0_selection)  # Ensure ref0 is selected from the cloned universe
 
     bsize = stop - start
     results = np.zeros([bsize, 2])
@@ -29,7 +36,7 @@ def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=Non
     start1 = time.time()
     for iframe, ts in enumerate(clone.trajectory[start:stop:step]):
         start2 = time.time()
-        results[iframe, :] = ts.time, calculate_rmsd(g, ref0)[iframe]
+        results[iframe, :] = ts.time, calculate_rmsd(g, xref0)[iframe]
         t_comp[iframe] = time.time() - start2
 
     t_all_frame = time.time() - start1
@@ -37,9 +44,12 @@ def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=Non
 
     return results, t_comp_final, t_all_frame
 
+
 def com_parallel_dask(ag, n_blocks):
     topology, trajectory = ag.universe.filename, ag.universe.trajectory.filename
-    ref0_selection = "(resid 1:29 or resid 60:121 or resid 160:214) and name CA"  # Use the same selection for ref0
+    ref0 = ag.universe.select_atoms("protein")
+    xref0 = ref0.positions - ref0.center_of_mass()  # Center the reference at the origin
+
     bsize = int(np.ceil(ag.universe.trajectory.n_frames / float(n_blocks)))
     print("Setting up {} blocks with {} frames each".format(n_blocks, bsize))
 
@@ -50,26 +60,34 @@ def com_parallel_dask(ag, n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
         print("Dask setting up block trajectory[{}:{}]".format(start, stop))
 
-        out = delayed(block_rmsd, pure=True)(ag.indices, topology, trajectory, ref0_selection, start=start, stop=stop, step=step)
+        out = delayed(block_rmsd)(ag.indices, topology, trajectory, xref0, start=start, stop=stop, step=step)
         blocks.append(out[0])
         t_comp.append(out[1])
         t_all_frame.append(out[2])
 
     total = delayed(np.vstack)(blocks)
-    t_comp_avg = delayed(np.sum)(t_comp) / n_blocks
+    t_comp_avg = delayed(np.mean)(t_comp)
     t_comp_max = delayed(np.max)(t_comp)
-    t_all_frame_avg = delayed(np.sum)(t_all_frame) / n_blocks
+    t_all_frame_avg = delayed(np.mean)(t_all_frame)
     t_all_frame_max = delayed(np.max)(t_all_frame)
 
     return total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max
 
+
 def main(n_workers):
+    # Close any existing Dask client
+    try:
+        client.close()
+    except:
+        pass
+
     # Initialize Dask client
     client = Client(n_workers=n_workers)
     print(f"Dask client initialized with {n_workers} workers.")
 
-    PSF = "adk4AKE.psf"
-    DCD1 = "1ake_007-nowater-core-dt240ps.dcd"
+    # Use absolute paths for PSF and DCD files
+    PSF = "/absolute/path/to/adk4AKE.psf"
+    DCD1 = "/absolute/path/to/1ake_007-nowater-core-dt240ps.dcd"
 
     with open('data.txt', mode='w') as file:
         traj_size = [50, 150, 300]
@@ -97,21 +115,23 @@ def main(n_workers):
                     print("Frames in trajectory {} for traj_size {}".format(u.trajectory.n_frames, k))
                     mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
 
-                    total = com_parallel_dask(mobile, i)
-                    total = delayed(total)
-                    start = time.time()
-                    output = total.compute()
-                    tot_time = time.time() - start
-                    file.write(
-                        "DCD {} {} {} {} {} {} {} {}\n".format(k, i, j, output[1], output[2], output[3], output[4],
-                                                               tot_time))
-                    file.flush()
-                    os.remove('newtraj{}.dcd'.format(ii))
-                    ii += 1
+                    with performance_report(filename=f"dask-report-{k}-{i}-{j}.html"):
+                        total = com_parallel_dask(mobile, i)
+                        total = delayed(total)
+                        start = time.time()
+                        output = total.compute()
+                        tot_time = time.time() - start
+                        file.write(
+                            "DCD {} {} {} {} {} {} {} {}\n".format(k, i, j, output[1], output[2], output[3], output[4],
+                                                                   tot_time))
+                        file.flush()
+                        os.remove('newtraj{}.dcd'.format(ii))
+                        ii += 1
 
     # Close the Dask client
     client.close()
     print("Dask client closed.")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run MDAnalysis benchmark with Dask locally.')
