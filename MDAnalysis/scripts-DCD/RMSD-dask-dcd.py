@@ -4,7 +4,7 @@ import numpy as np
 import MDAnalysis as mda
 from MDAnalysis import Universe, Writer
 from MDAnalysis.analysis import rms
-from dask.distributed import Client
+from dask.distributed import Client, wait
 from dask import delayed
 import time
 from shutil import copyfile
@@ -15,17 +15,20 @@ import warnings
 # Suppress specific DeprecationWarning
 warnings.filterwarnings("ignore", category=DeprecationWarning, message="DCDReader currently makes independent timesteps")
 
-def calculate_rmsd(mobile, ref0):
-    """Calculate RMSD using MDAnalysis' RMSD class."""
-    rmsd_calc = rms.RMSD(mobile, ref0)
-    rmsd_calc.run()
-    return rmsd_calc.results.rmsd[:, 2]  # returning the RMSD values
+def rmsd(mobile, xref0):
+    xmobile0 = mobile.positions - mobile.center_of_mass()
+    return np.linalg.norm(xmobile0 - xref0, axis=1).mean()
 
-def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=None, step=None):
-    clone = mda.Universe(topology, trajectory)
-    g = clone.atoms[index]
-    ref0 = clone.select_atoms(ref0_selection)  # Ensure ref0 is selected from the cloned universe
+def block_rmsd(ag, ref0, start=None, stop=None, step=None):
+    u = ag.universe
+    xref0 = ref0.positions - ref0.center_of_mass()
 
+    clone = mda.Universe(u.filename, u.trajectory.filename, **u.kwargs)
+    g = clone.atoms[ag.indices]
+    assert u != clone
+
+    print("block_rmsd", start, stop, step)
+    print(len(clone.trajectory))
     bsize = stop - start
     results = np.zeros([bsize, 2])
     t_comp = np.zeros(bsize)
@@ -33,7 +36,7 @@ def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=Non
     start1 = time.time()
     for iframe, ts in enumerate(clone.trajectory[start:stop:step]):
         start2 = time.time()
-        results[iframe, :] = ts.time, calculate_rmsd(g, ref0)[iframe]
+        results[iframe, :] = ts.time, rmsd(g, xref0)
         t_comp[iframe] = time.time() - start2
 
     t_all_frame = time.time() - start1
@@ -41,20 +44,24 @@ def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=Non
 
     return results, t_comp_final, t_all_frame
 
-def com_parallel_dask(ag, n_blocks):
-    topology, trajectory = ag.universe.filename, ag.universe.trajectory.filename
-    ref0_selection = "(resid 1:29 or resid 60:121 or resid 160:214) and name CA"  # Use the same selection for ref0
+def com_parallel_dask(ag, n_blocks, client):
+    ref0 = ag.universe.select_atoms("protein")
     bsize = int(np.ceil(ag.universe.trajectory.n_frames / float(n_blocks)))
     print("Setting up {} blocks with {} frames each".format(n_blocks, bsize))
 
     blocks = []
     t_comp = []
     t_all_frame = []
+
+    # Scatter the data to workers
+    ag_fut = client.scatter(ag)
+    ref0_fut = client.scatter(ref0)
+    
     for iblock in range(n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
         print("Dask setting up block trajectory[{}:{}]".format(start, stop))
 
-        out = delayed(block_rmsd)(ag.indices, topology, trajectory, ref0_selection, start=start, stop=stop, step=step)
+        out = delayed(block_rmsd)(ag_fut, ref0_fut, start=start, stop=stop, step=step)
         blocks.append(out[0])
         t_comp.append(out[1])
         t_all_frame.append(out[2])
@@ -101,7 +108,7 @@ def main(n_workers):
                     print("Frames in trajectory {} for traj_size {}".format(u.trajectory.n_frames, k))
                     mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
 
-                    total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i)
+                    total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i, client)
                     start = time.time()
                     output = total.compute(scheduler=client)  # Use the client as the scheduler
                     tot_time = time.time() - start
