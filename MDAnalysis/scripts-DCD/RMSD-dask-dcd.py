@@ -115,19 +115,15 @@ def main(n_workers):
                     print("Frames in trajectory {} for traj_size {}".format(u.trajectory.n_frames, k))
                     mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
 
-                    with performance_report(filename=f"dask-report-{k}-{i}-{j}.html"):
-                        total = com_parallel_dask(mobile, i)
-                        total = delayed(total)
-                        start = time.time()
-                        output = total.compute()
-                        tot_time = time.time() - start
-                        file.write(
-                            "DCD {} {} {} {} {} {} {} {}\n".format(k, i, j, output[1], output[2], output[3], output[4],
-                                                                   tot_time))
-                        file.flush()
-                        os.remove('newtraj{}.dcd'.format(ii))
-                        ii += 1
-
+                    total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i)
+                    start = time.time()
+                    output = total.compute(get=client.get)
+                    tot_time = time.time() - start
+                    file.write(
+                        "DCD {} {} {} {} {} {} {} {}\n".format(k, i, j, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, tot_time))
+                    file.flush()
+                    os.remove('newtraj{}.dcd'.format(ii))
+                    ii += 1
     # Close the Dask client
     client.close()
     print("Dask client closed.")
