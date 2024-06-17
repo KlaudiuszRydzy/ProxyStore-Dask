@@ -19,16 +19,11 @@ def rmsd(mobile, xref0):
     xmobile0 = mobile.positions - mobile.center_of_mass()
     return np.linalg.norm(xmobile0 - xref0, axis=1).mean()
 
-def block_rmsd(ag, ref0, start=None, stop=None, step=None):
-    u = ag.universe
-    xref0 = ref0.positions - ref0.center_of_mass()
+def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=None, step=None):
+    clone = mda.Universe(topology, trajectory)
+    g = clone.atoms[index]
+    ref0 = clone.select_atoms(ref0_selection)  # Ensure ref0 is selected from the cloned universe
 
-    clone = mda.Universe(u.filename, u.trajectory.filename, **u.kwargs)
-    g = clone.atoms[ag.indices]
-    assert u != clone
-
-    print("block_rmsd", start, stop, step)
-    print(len(clone.trajectory))
     bsize = stop - start
     results = np.zeros([bsize, 2])
     t_comp = np.zeros(bsize)
@@ -36,7 +31,7 @@ def block_rmsd(ag, ref0, start=None, stop=None, step=None):
     start1 = time.time()
     for iframe, ts in enumerate(clone.trajectory[start:stop:step]):
         start2 = time.time()
-        results[iframe, :] = ts.time, rmsd(g, xref0)
+        results[iframe, :] = ts.time, rmsd(g, ref0)
         t_comp[iframe] = time.time() - start2
 
     t_all_frame = time.time() - start1
@@ -44,9 +39,8 @@ def block_rmsd(ag, ref0, start=None, stop=None, step=None):
 
     return results, t_comp_final, t_all_frame
 
-def com_parallel_dask(ag, n_blocks, client):
-    ref0 = ag.universe.select_atoms("protein")
-    bsize = int(np.ceil(ag.universe.trajectory.n_frames / float(n_blocks)))
+def com_parallel_dask(topology, trajectory, indices, ref0_selection, n_blocks, client):
+    bsize = int(np.ceil(mda.Universe(topology, trajectory).trajectory.n_frames / float(n_blocks)))
     print("Setting up {} blocks with {} frames each".format(n_blocks, bsize))
 
     blocks = []
@@ -54,14 +48,16 @@ def com_parallel_dask(ag, n_blocks, client):
     t_all_frame = []
 
     # Scatter the data to workers
-    ag_fut = client.scatter(ag)
-    ref0_fut = client.scatter(ref0)
+    topology_fut = client.scatter(topology)
+    trajectory_fut = client.scatter(trajectory)
+    indices_fut = client.scatter(indices)
+    ref0_selection_fut = client.scatter(ref0_selection)
     
     for iblock in range(n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
         print("Dask setting up block trajectory[{}:{}]".format(start, stop))
 
-        out = delayed(block_rmsd)(ag_fut, ref0_fut, start=start, stop=stop, step=step)
+        out = delayed(block_rmsd)(indices_fut, topology_fut, trajectory_fut, ref0_selection_fut, start=start, stop=stop, step=step)
         blocks.append(out[0])
         t_comp.append(out[1])
         t_all_frame.append(out[2])
@@ -107,8 +103,9 @@ def main(n_workers):
                     print(u)
                     print("Frames in trajectory {} for traj_size {}".format(u.trajectory.n_frames, k))
                     mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
+                    indices = mobile.indices
 
-                    total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i, client)
+                    total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(PSF, longDCD1, indices, "(resid 1:29 or resid 60:121 or resid 160:214) and name CA", i, client)
                     start = time.time()
                     output = total.compute(scheduler=client)  # Use the client as the scheduler
                     tot_time = time.time() - start
