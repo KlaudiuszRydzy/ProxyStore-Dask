@@ -117,7 +117,7 @@ def main(n_workers):
 
                     total, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i)
                     start = time.time()
-                    output = total.compute(get=client.get)
+                    output = total.compute(scheduler=client)  # Use the client as the scheduler
                     tot_time = time.time() - start
                     file.write(
                         "DCD {} {} {} {} {} {} {} {}\n".format(k, i, j, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, tot_time))
