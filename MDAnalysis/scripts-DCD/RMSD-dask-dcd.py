@@ -117,4 +117,7 @@ def main(n_workers):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run MDAnalysis benchmark with Dask locally.')
-    parser.add_argument('--n_workers', type=int, default=4, help='Number of
+    parser.add_argument('--n_workers', type=int, default=4, help='Number of Dask workers')
+    args = parser.parse_args()
+
+    main(args.n_workers)
