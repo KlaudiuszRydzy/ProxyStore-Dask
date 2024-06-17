@@ -3,7 +3,7 @@ from __future__ import print_function, division
 import numpy as np
 import MDAnalysis as mda
 from MDAnalysis import Universe, Writer
-from MDAnalysis.analysis import rms
+from MDAnalysis.analysis.rms import RMSD
 from dask.distributed import Client, wait
 from dask import delayed
 import time
@@ -15,9 +15,11 @@ import warnings
 # Suppress specific DeprecationWarning
 warnings.filterwarnings("ignore", category=DeprecationWarning, message="DCDReader currently makes independent timesteps")
 
-def rmsd(mobile, xref0):
-    xmobile0 = mobile.positions - mobile.center_of_mass()
-    return np.linalg.norm(xmobile0 - xref0, axis=1).mean()
+def calculate_rmsd(mobile, ref0):
+    """Calculate RMSD using MDAnalysis' RMSD class."""
+    rmsd_calc = RMSD(mobile, ref0)
+    rmsd_calc.run()
+    return rmsd_calc.results.rmsd[:, 2]  # returning the RMSD values
 
 def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=None, step=None):
     clone = mda.Universe(topology, trajectory)
@@ -31,7 +33,7 @@ def block_rmsd(index, topology, trajectory, ref0_selection, start=None, stop=Non
     start1 = time.time()
     for iframe, ts in enumerate(clone.trajectory[start:stop:step]):
         start2 = time.time()
-        results[iframe, :] = ts.time, rmsd(g, ref0)
+        results[iframe, :] = ts.time, calculate_rmsd(g, ref0)[iframe]
         t_comp[iframe] = time.time() - start2
 
     t_all_frame = time.time() - start1
