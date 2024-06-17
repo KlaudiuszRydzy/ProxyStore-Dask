@@ -10,7 +10,7 @@ This repository benchmarks the performance of MDAnalysis applications using Dask
 
 ```bash
 conda env create -f MDAnalysis/environment.yml
-conda activate mdanalysis-benchmark
+conda activate mdanalysis
 ```
 # Example benchmark run
 python MDAnalysis/benchmark/benchmark_script.py --n_workers 4 --threads_per_worker 2 --data_size 1000 --chunk_size 10
