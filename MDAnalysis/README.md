@@ -13,7 +13,7 @@ conda env create -f MDAnalysis/environment.yml
 conda activate mdanalysis
 ```
 # Example benchmark run
-python MDAnalysis/benchmark/benchmark_script.py --n_workers 4 --threads_per_worker 2 --data_size 1000 --chunk_size 10
+python MDAnalysis/scripts-DCD/RMSD-dask-dcd.py --n_workers 4 --threads_per_worker 2 --data_size 1000 --chunk_size 10
 
 --n_workers: Number of Dask workers.
 
