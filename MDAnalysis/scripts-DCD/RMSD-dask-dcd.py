@@ -86,8 +86,8 @@ def main(n_workers):
     print(f"Dask client initialized with {n_workers} workers.")
 
     # Use absolute paths for PSF and DCD files
-    PSF = "/absolute/path/to/adk4AKE.psf"
-    DCD1 = "/absolute/path/to/1ake_007-nowater-core-dt240ps.dcd"
+    PSF = "adk4AKE.psf"
+    DCD1 = "1ake_007-nowater-core-dt240ps.dcd"
 
     with open('data.txt', mode='w') as file:
         traj_size = [50, 150, 300]
