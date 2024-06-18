@@ -29,9 +29,11 @@ The format of this will be:
 
 XTC<trajectory_size> <block_size> <t_comp_avg> <t_comp_max> t_all_frame_avg> <t_all_frame_ma> <tot_time>
 
-For example, the line: XTC50 1 1 4.590783735320367e-05 4.590783735320367e-05 28.090301513671875 28.090301513671875 29.29596996307373
+# For example, the line:
 
-can be broken down as:
+XTC50 1 1 4.590783735320367e-05 4.590783735320367e-05 28.090301513671875 28.090301513671875 29.29596996307373
+
+# can be broken down as:
 
 XTC50 1: Trajectory size 50 and block size 1.
 
