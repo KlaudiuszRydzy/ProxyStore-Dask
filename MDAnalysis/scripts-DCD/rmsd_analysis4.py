@@ -105,12 +105,13 @@ if __name__ == "__main__":
                     print(len(u.trajectory))
                     mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
 
-                    start = time.time()
-                    results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max = com_parallel_dask(mobile, i, client)
-                    tot_time = time.time() - start
+                    with performance_report(filename=f"report_{k}_{i}_{j}.html"):
+                        start = time.time()
+                        results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, bsize_total = com_parallel_dask(mobile, i, client)
+                        tot_time = time.time() - start
 
-                    file.write("XTC{} {} {} {} {} {} {} {}\n".format(k, i, j, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, tot_time))
-                    file.flush()
+                        file.write("XTC{} {} {} {} {} {} {} {} {}\n".format(k, i, j, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, tot_time, bsize_total))
+                        file.flush()
                     os.remove('newtraj{}.dcd'.format(ii))
                     ii = ii + 1
     client.close()
