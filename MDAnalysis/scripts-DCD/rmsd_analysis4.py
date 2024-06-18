@@ -11,6 +11,7 @@ from dask.multiprocessing import get
 from MDAnalysis.analysis.align import rotation_matrix
 from MDAnalysis.lib.qcprot import CalcRMSDRotationalMatrix
 import time
+import multiprocessing
 from shutil import copyfile
 import glob, os
 import warnings
