@@ -13,6 +13,10 @@ from MDAnalysis.lib.qcprot import CalcRMSDRotationalMatrix
 import time
 from shutil import copyfile
 import glob, os
+import warnings
+from Bio import BiopythonDeprecationWarning
+warnings.simplefilter('ignore', BiopythonDeprecationWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning, module='MDAnalysis.coordinates.DCD')
 
 def rmsd(mobile, xref0):
     xmobile0 = mobile.positions - mobile.center_of_mass()
