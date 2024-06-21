@@ -56,13 +56,14 @@ def com_parallel_dask(ag, n_blocks, client, store):
     bsize = int(np.ceil(ag.universe.trajectory.n_frames / float(n_blocks)))
 
     blocks = []
-    block_input_size = pickle_size((ag, ref0, 0, bsize, 1))
+    sample_block_input = (ag, ref0)
+    block_input_size = pickle_size(sample_block_input)/n_blocks
 
     for iblock in range(n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
-        block_input = (ag, ref0, start, stop, step)
+        block_input = (ag, ref0)
         block_input_proxy = store.proxy(block_input)
-        out = delayed(block_rmsd)(block_input_proxy[0], block_input_proxy[1], start=block_input_proxy[2], stop=block_input_proxy[3], step=block_input_proxy[4])
+        out = delayed(block_rmsd)(block_input_proxy[0], block_input_proxy[1], start=start, stop=stop, step=step)
         blocks.append(out)
 
     output = client.compute(blocks, sync=True)
@@ -92,9 +93,9 @@ if __name__ == "__main__":
         register=True,
     ) as store:
 
-        with open('data.txt', mode='w') as file:
+        with open('data_PS.txt', mode='w') as file:
             traj_size = [25, 50, 100]  # Smaller trajectory sizes for testing
-            with performance_report(filename="report.html"):
+            with performance_report(filename="report_PS.html"):
                 for k in traj_size:
                     # Creating the universe for doing benchmark
                     u1 = mda.Universe(PSF, DCD1)
