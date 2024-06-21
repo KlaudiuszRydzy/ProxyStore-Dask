@@ -62,7 +62,7 @@ def com_parallel_dask(ag, n_blocks, client, store):
     blocks = []
     # Calculate block_input_size for a sample block to get an accurate measurement
     sample_block_input = (ag, ref0)
-    block_input_size = pickle_size(sample_block_input)
+    block_input_size = pickle_size(sample_block_input)/n_blocks
     
     for iblock in range(n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
