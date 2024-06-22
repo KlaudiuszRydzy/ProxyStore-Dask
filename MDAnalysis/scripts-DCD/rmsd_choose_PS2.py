@@ -56,12 +56,11 @@ def block_rmsd(ag, ref0, start=None, stop=None, step=None):
     t_comp_final = np.mean(t_comp)
     results_proxy = store.proxy(results)
 
-    if block_input_size == 0:
-        block_input_size = pickle_size(results)
+    size = pickle_size(results)
 
-    return results_proxy, t_comp_final, t_all_frame
+    return results_proxy, t_comp_final, t_all_frame, size
 
-def com_parallel_dask(ag, n_blocks, client, store):
+def com_parallel_dask(ag, n_blocks, client):
     ref0 = ag.universe.select_atoms("protein")
     bsize = int(np.ceil(ag.universe.trajectory.n_frames / float(n_blocks)))
 
@@ -75,13 +74,15 @@ def com_parallel_dask(ag, n_blocks, client, store):
     output = client.compute(blocks, sync=True)
 
     # Proxy the results
-    results = np.vstack([store.get(out[0]) for out in output])
+    results = np.vstack([out[0] for out in output])
     results_proxy = store.proxy(results)
     t_comp_avg = np.mean([out[1] for out in output])
     t_comp_max = np.max([out[1] for out in output])
     t_all_frame_avg = np.mean([out[2] for out in output])
     t_all_frame_max = np.max([out[2] for out in output])
     pickle_size_result = pickle_size(results)  # Calculate the pickle size of the results
+
+    block_input_size = output[0][3]
 
     return results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, block_input_size
 
@@ -140,7 +141,7 @@ if __name__ == "__main__":
                         mobile = u.select_atoms("(resid 1:29 or resid 60:121 or resid 160:214) and name CA")
 
                         start = time.time()
-                        results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, block_input_size = com_parallel_dask(mobile, block_size, client, store)
+                        results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, block_input_size = com_parallel_dask(mobile, block_size, client)
                         tot_time = time.time() - start
 
                         file.write("XTC{} {} {} {} {} {} {} {} {} {}\n".format(k, block_size, j, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, tot_time, pickle_size_result, block_input_size))
