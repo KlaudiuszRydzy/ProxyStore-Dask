@@ -25,8 +25,6 @@ import argparse
 warnings.simplefilter('ignore', BiopythonDeprecationWarning)
 warnings.filterwarnings('ignore', category=DeprecationWarning, module='MDAnalysis.coordinates.DCD')
 
-block_input_size = 0
-
 def pickle_size(obj):
     return sys.getsizeof(pickle.dumps(obj))
 
