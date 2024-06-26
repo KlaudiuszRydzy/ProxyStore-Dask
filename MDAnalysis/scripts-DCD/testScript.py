@@ -87,7 +87,7 @@ def com_parallel_dask(ag, n_blocks, client, store=None):
             out = delayed(block_rmsd)(ag, ref0, start=start, stop=stop, step=step)
         blocks.append(out)
 
-    blockssize = pickle_size(blocks)
+    blockssize = 1
 
     start_client_compute = time.time()
     output = client.compute(blocks, sync=True)
