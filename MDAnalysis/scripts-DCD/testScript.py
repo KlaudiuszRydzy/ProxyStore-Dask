@@ -75,16 +75,16 @@ def com_parallel_dask(ag, n_blocks, client, store=None):
     blocks = []
     agsize = pickle_size(ag)
     ref0size = pickle_size(ref0)
+    store_config = None
+
+    if store:
+        ag = store.proxy(ag)
+        ref0 = store.proxy(ref0)
+        store_config = store.config()
 
     for iblock in range(n_blocks):
         start, stop, step = iblock * bsize, (iblock + 1) * bsize, 1
-        if store:
-            agprox = store.proxy(ag)
-            ref0prox = store.proxy(ref0)
-            store_config = store.config()
-            out = delayed(block_rmsd)(agprox, ref0prox, start=start, stop=stop, step=step, store_config=store_config)
-        else:
-            out = delayed(block_rmsd)(ag, ref0, start=start, stop=stop, step=step)
+        out = delayed(block_rmsd)(ag, ref0, start=start, stop=stop, step=step, store_config=store_config)
         blocks.append(out)
 
     blockssize = 1
