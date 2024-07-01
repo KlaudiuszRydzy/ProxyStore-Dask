@@ -256,10 +256,21 @@ if __name__ == "__main__":
         'mean': np.mean(all_block_rmsd_times),
         'stdev': np.std(all_block_rmsd_times, ddof=1)
     }
+    finegrained_input_diff = [min(times[1:len(times)//2]) - times[0] for times in all_finegrained_times]
+    finegrained_output_diff = [times[-1] - max(times[len(times)//2:-1]) for times in all_finegrained_times]
 
     with open('stats.txt', 'w') as stats_file:
         stats_file.write(f'Runtime statistics: {runtime_stats}\n')
         stats_file.write(f'Pickle size statistics: {pickle_size_stats}\n')
         stats_file.write(f'Block RMSD statistics: {block_rmsd_stats}\n')
+        for i in range(len(finegrained_input_diff)):
+            stats_file.write(f'Iteration {i+1}:\n')
+            stats_file.write(f'Fine-grained input time difference: {finegrained_input_diff[i]}\n')
+            stats_file.write(f'Fine-grained output time difference: {finegrained_output_diff[i]}\n')
+            stats_file.write('\n')
+        for i, times in enumerate(all_finegrained_times):
+            stats_file.write(f'Iteration {i+1}:\n')
+            stats_file.write(f'{times}\n')
+            stats_file.write('\n')
 
     client.close()
