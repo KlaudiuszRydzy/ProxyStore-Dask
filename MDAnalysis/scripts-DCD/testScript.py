@@ -129,6 +129,15 @@ if __name__ == "__main__":
     num_traj_sizes = args.num_traj_sizes
     use_proxystore = args.proxystore
 
+    if use_proxystore:
+        data_filename = 'data_PS.txt'
+        report_filename = 'report_PS.html'
+        stats_filename = 'stats_PS.txt'
+    else:
+        data_filename = 'data_PS.txt'
+        report_filename = 'report.html'
+        stats_filename = 'stats.txt'
+
     traj_sizes = [(i + 1) * traj_size // num_traj_sizes for i in range(num_traj_sizes)]
 
     PSF, DCD1 = ["adk4AKE.psf", "1ake_007-nowater-core-dt240ps.dcd"]
@@ -156,8 +165,8 @@ if __name__ == "__main__":
     all_block_rmsd_times = []
     all_finegrained_times = []
 
-    with open('data_PS.txt', 'w') as file:
-        with performance_report(filename="report_PS.html"):
+    with open(data_filename, 'a') as file:
+        with performance_report(filename="report_filename):
             for k in traj_sizes:
                 # Creating the universe for doing benchmark
                 start_time_u1 = time.time()
@@ -256,10 +265,10 @@ if __name__ == "__main__":
         'mean': np.mean(all_block_rmsd_times),
         'stdev': np.std(all_block_rmsd_times, ddof=1)
     }
-    finegrained_input_diff = [min(times[1:len(times)//2]) - times[0] for times in all_finegrained_times]
-    finegrained_output_diff = [times[-1] - max(times[len(times)//2:-1]) for times in all_finegrained_times]
+    finegrained_input_diff = [min(times[1:]) - times[0] for times in all_finegrained_times]
+    finegrained_output_diff = [times[-1] - max(times[:-1]) for times in all_finegrained_times]
 
-    with open('stats.txt', 'w') as stats_file:
+    with open(stats_filename, 'a') as stats_file:
         stats_file.write(f'Runtime statistics: {runtime_stats}\n')
         stats_file.write(f'Pickle size statistics: {pickle_size_stats}\n')
         stats_file.write(f'Block RMSD statistics: {block_rmsd_stats}\n')
