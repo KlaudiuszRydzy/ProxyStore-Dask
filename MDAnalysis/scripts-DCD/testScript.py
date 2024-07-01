@@ -66,7 +66,7 @@ def block_rmsd(ag, ref0, start=None, stop=None, step=None, store_config=None):
     end_block_rmsd = time.time()
     block_rmsd_time = end_block_rmsd - start_block_rmsd
 
-    return results, t_comp_final, t_all_frame, block_rmsd_time, u_size, xref0_size, g_size, results_size
+    return results, t_comp_final, t_all_frame, block_rmsd_time, u_size, xref0_size, g_size, results_size, start_block_rmsd, end_block_rmsd
 
 def com_parallel_dask(ag, n_blocks, client, store=None):
     ref0 = ag.universe.select_atoms("protein")
@@ -106,10 +106,12 @@ def com_parallel_dask(ag, n_blocks, client, store=None):
     xref0_sizes = [out[5] for out in output]
     g_sizes = [out[6] for out in output]
     results_sizes = [out[7] for out in output]
+    finegrained_inputs = [out[8] for out in output]
+    finegrained_outputs = [out[9] for out in output]
     end_calculations = time.time()
     calculations_time = end_calculations - start_calculations
 
-    return results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blockssize, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes
+    return results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blockssize, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run MDAnalysis benchmarks with Dask and ProxyStore.')
@@ -152,6 +154,7 @@ if __name__ == "__main__":
         'results_sizes': []
     }
     all_block_rmsd_times = []
+    all_finegrained_times = []
 
     with open('data_PS.txt', 'w') as file:
         with performance_report(filename="report_PS.html"):
@@ -191,7 +194,7 @@ if __name__ == "__main__":
 
                     # Time the execution of com_parallel_dask
                     start_time_com_parallel_dask = time.time()
-                    results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blocks_size, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes = com_parallel_dask(mobile, block_size, client, store)
+                    results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blocks_size, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs = com_parallel_dask(mobile, block_size, client, store)
                     end_time_com_parallel_dask = time.time()
                     total_com_parallel_dask_time = end_time_com_parallel_dask - start_time_com_parallel_dask
 
@@ -229,6 +232,7 @@ if __name__ == "__main__":
                     all_pickle_sizes['g_sizes'].extend(g_sizes)
                     all_pickle_sizes['results_sizes'].extend(results_sizes)
                     all_block_rmsd_times.extend(block_rmsd_times)
+                    all_finegrained_times.append([start_client_compute] + finegrained_inputs + finegrained_outputs + [end_client_compute])
                     ii += 1
 
     # Calculate statistics using numpy
