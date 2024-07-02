@@ -6,7 +6,7 @@ from MDAnalysis import Universe, Writer
 from MDAnalysis.analysis.align import rotation_matrix
 from MDAnalysis.lib.qcprot import CalcRMSDRotationalMatrix
 import dask
-from dask.distributed import Client, performance_report
+from dask.distributed import Client, performance_report, get_task_stream
 from dask.delayed import delayed
 import time
 import multiprocessing
@@ -90,9 +90,12 @@ def com_parallel_dask(ag, n_blocks, client, store=None):
     blockssize = 1
 
     start_client_compute = time.time()
-    output = client.compute(blocks, sync=True)
+    with get_task_stream() as ts:
+        output = client.compute(blocks, sync=True)
     end_client_compute = time.time()
     client_compute_time = end_client_compute - start_client_compute
+
+    task_stream_data = ts.data
 
     start_calculations = time.time()
     results = np.vstack([out[0] for out in output])
@@ -111,7 +114,7 @@ def com_parallel_dask(ag, n_blocks, client, store=None):
     end_calculations = time.time()
     calculations_time = end_calculations - start_calculations
 
-    return results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blockssize, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs
+    return results, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blockssize, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs, task_stream_data
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run MDAnalysis benchmarks with Dask and ProxyStore.')
@@ -164,6 +167,7 @@ if __name__ == "__main__":
     }
     all_block_rmsd_times = []
     all_finegrained_times = []
+    all_task_stream_data = []
 
     with open(data_filename, 'a') as file:
         with performance_report(filename=report_filename):
@@ -203,7 +207,7 @@ if __name__ == "__main__":
 
                     # Time the execution of com_parallel_dask
                     start_time_com_parallel_dask = time.time()
-                    results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blocks_size, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs = com_parallel_dask(mobile, block_size, client, store)
+                    results_proxy, t_comp_avg, t_comp_max, t_all_frame_avg, t_all_frame_max, pickle_size_result, blocks_size, block_rmsd_times, client_compute_time, calculations_time, agsize, ref0size, u_sizes, xref0_sizes, g_sizes, results_sizes, start_client_compute, end_client_compute, finegrained_inputs, finegrained_outputs, task_stream_data = com_parallel_dask(mobile, block_size, client, store)
                     end_time_com_parallel_dask = time.time()
                     total_com_parallel_dask_time = end_time_com_parallel_dask - start_time_com_parallel_dask
 
@@ -242,6 +246,7 @@ if __name__ == "__main__":
                     all_pickle_sizes['results_sizes'].extend(results_sizes)
                     all_block_rmsd_times.extend(block_rmsd_times)
                     all_finegrained_times.append([start_client_compute] + finegrained_inputs + finegrained_outputs + [end_client_compute])
+                    all_task_stream_data.append(task_stream_data)
                     ii += 1
 
     # Calculate statistics using numpy
@@ -280,6 +285,9 @@ if __name__ == "__main__":
         for i, times in enumerate(all_finegrained_times):
             stats_file.write(f'Iteration {i+1}:\n')
             stats_file.write(f'{times}\n')
+            stats_file.write('\n')
+        for i in range(len(all_task_stream_data)):
+            stats_file.write(f'task stream data: {all_task_stream_data[i]}\n')
             stats_file.write('\n')
 
     client.close()
