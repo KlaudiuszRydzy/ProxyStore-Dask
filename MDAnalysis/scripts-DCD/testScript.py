@@ -20,6 +20,7 @@ from proxystore.store import Store, get_or_create_store
 import os
 import argparse
 import statistics
+from task_timing_plugin import TaskTimingPlugin, WorkerTimingPlugin
 
 warnings.simplefilter('ignore', BiopythonDeprecationWarning)
 warnings.filterwarnings('ignore', category=DeprecationWarning, module='MDAnalysis.coordinates.DCD')
@@ -148,6 +149,13 @@ if __name__ == "__main__":
     num_cores = multiprocessing.cpu_count()
     client = Client(n_workers=8)
     dask.config.set(scheduler='distributed')
+    # Register Scheduler Plugin
+    scheduler_plugin = TaskTimingPlugin()
+    client.register_scheduler_plugin(scheduler_plugin)
+
+    # Register Worker Plugin
+    worker_plugin = WorkerTimingPlugin()
+    client.register_worker_plugin(worker_plugin)
 
     store = None
     if use_proxystore:
@@ -272,6 +280,8 @@ if __name__ == "__main__":
     }
     finegrained_input_diff = [min(times[1:]) - times[0] for times in all_finegrained_times]
     finegrained_output_diff = [times[-1] - max(times[:-1]) for times in all_finegrained_times]
+    scheduler_durations = scheduler_plugin.get_task_durations()
+    worker_durations = worker_plugin.get_task_durations()
 
     with open(stats_filename, 'a') as stats_file:
         stats_file.write(f'Runtime statistics: {runtime_stats}\n')
@@ -289,5 +299,7 @@ if __name__ == "__main__":
         for i in range(len(all_task_stream_data)):
             stats_file.write(f'task stream data: {all_task_stream_data[i]}\n')
             stats_file.write('\n')
+        stats_file.write(f'scheduler durations: {scheduler_durations}\n')
+        stats_file.write(f'worker durations: {worker_durations}\n')
 
     client.close()
