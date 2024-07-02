@@ -30,10 +30,10 @@ def plot_graph(block_sizes, proxystore_stats, non_proxystore_stats, metric, ylab
     plt.figure(figsize=(10, 6))
     plt.errorbar(block_sizes, [proxystore_stats[bs][metric_mean] for bs in block_sizes], 
                  yerr=[proxystore_stats[bs][metric_stdev] for bs in block_sizes], 
-                 label='ProxyStore', color='purple', linestyle='None', marker='^')
+                 label='ProxyStore', ecolor='purple', capsize=3, linestyle='--', marker='^', alpha=0.6)
     plt.errorbar(block_sizes, [non_proxystore_stats[bs][metric_mean] for bs in block_sizes], 
                  yerr=[non_proxystore_stats[bs][metric_stdev] for bs in block_sizes], 
-                 label='Non-ProxyStore', color='orange', linestyle='None', marker='^')
+                 label='Non-ProxyStore', ecolor='orange', capsize=3, linestyle='-', marker='^', alpha=0.6)
 
     plt.xlabel('Block Size')
     plt.ylabel(ylabel)
