@@ -1,0 +1,120 @@
+Runtime statistics: {'create_universe_u1': {'min': 0.09350776672363281, 'max': 0.09350776672363281, 'mean': 0.09350776672363281, 'stdev': 0.0}, 'create_universe_u_before_loop': {'min': 0.07831120491027832, 'max': 0.07831120491027832, 'mean': 0.07831120491027832, 'stdev': 0.0}, 'create_universe_u': {'min': 26.159099102020264, 'max': 29.764060497283936, 'mean': 27.71130887667338, 'stdev': 1.8538725064041512}, 'select_atoms': {'min': 0.0016705989837646484, 'max': 0.0029439926147460938, 'mean': 0.0021060307820638022, 'stdev': 0.0007258826739159677}, 'write_trajectory': {'min': 167.8432171344757, 'max': 167.8432171344757, 'mean': 167.8432171344757, 'stdev': 0.0}, 'com_parallel_dask_total': {'min': 127.34383368492126, 'max': 129.49660277366638, 'mean': 128.5709879398346, 'stdev': 1.1076092290215735}, 'client_compute_time': {'min': 127.087726354599, 'max': 129.2136468887329, 'mean': 128.2607583204905, 'stdev': 1.0799221573842397}, 'calculations_time': {'min': 0.04133009910583496, 'max': 0.04341554641723633, 'mean': 0.04262916247049967, 'stdev': 0.0011333149435761838}, 'file_write': {'min': 0.00010442733764648438, 'max': 0.0007498264312744141, 'mean': 0.00033346811930338543, 'stdev': 0.00036117985877700377}}
+Pickle size statistics: {'u_sizes': {'min': 1904285, 'max': 1904285, 'mean': 1904285.0, 'stdev': 0.0}, 'xref0_sizes': {'min': 80379, 'max': 80379, 'mean': 80379.0, 'stdev': 0.0}, 'g_sizes': {'min': 1905521, 'max': 1905521, 'mean': 1905521.0, 'stdev': 0.0}, 'results_sizes': {'min': 13398597, 'max': 13398597, 'mean': 13398597.0, 'stdev': 0.0}}
+Block RMSD statistics: {'min': 126.41125345230103, 'max': 128.53573632240295, 'mean': 127.57800157864888, 'stdev': 1.077553623684968}
+Iteration 1:
+Fine-grained input time difference: 0.6257281303405762
+Fine-grained output time difference: 0.05218243598937988
+
+Iteration 2:
+Fine-grained input time difference: 0.6079995632171631
+Fine-grained output time difference: 0.06847333908081055
+
+Iteration 3:
+Fine-grained input time difference: 0.647148609161377
+Fine-grained output time difference: 0.0467381477355957
+
+Iteration 1:
+[1719894614.9511752, 1719894615.5769033, 1719894744.1126397, 1719894744.164822]
+
+Iteration 2:
+[1719894771.6355994, 1719894772.243599, 1719894898.6548524, 1719894898.7233257]
+
+Iteration 3:
+[1719894928.8793914, 1719894929.52654, 1719895057.313555, 1719895057.3602931]
+
+Runtime statistics: {'create_universe_u1': {'min': 0.0947730541229248, 'max': 0.0947730541229248, 'mean': 0.0947730541229248, 'stdev': 0.0}, 'create_universe_u_before_loop': {'min': 0.07891845703125, 'max': 0.07891845703125, 'mean': 0.07891845703125, 'stdev': 0.0}, 'create_universe_u': {'min': 25.823241710662842, 'max': 28.828895092010498, 'mean': 27.134592453638714, 'stdev': 1.5389857627158683}, 'select_atoms': {'min': 0.00140380859375, 'max': 0.003950834274291992, 'mean': 0.0023374557495117188, 'stdev': 0.0014029828954253071}, 'write_trajectory': {'min': 166.2632269859314, 'max': 166.2632269859314, 'mean': 166.2632269859314, 'stdev': 0.0}, 'com_parallel_dask_total': {'min': 128.54230880737305, 'max': 130.42066979408264, 'mean': 129.5360537370046, 'stdev': 0.9439236368566899}, 'client_compute_time': {'min': 128.28626823425293, 'max': 130.16429042816162, 'mean': 129.2819790840149, 'stdev': 0.9441326316300789}, 'calculations_time': {'min': 0.03886699676513672, 'max': 0.043233394622802734, 'mean': 0.041081746419270836, 'stdev': 0.002183882759595549}, 'file_write': {'min': 0.0001068115234375, 'max': 0.0004181861877441406, 'mean': 0.00021576881408691406, 'stdev': 0.00017546975730845668}}
+Pickle size statistics: {'u_sizes': {'min': 1904285, 'max': 1904285, 'mean': 1904285.0, 'stdev': 0.0}, 'xref0_sizes': {'min': 80379, 'max': 80379, 'mean': 80379.0, 'stdev': 0.0}, 'g_sizes': {'min': 1905521, 'max': 1905521, 'mean': 1905521.0, 'stdev': 0.0}, 'results_sizes': {'min': 13398597, 'max': 13398597, 'mean': 13398597.0, 'stdev': 0.0}}
+Block RMSD statistics: {'min': 127.63720536231995, 'max': 129.5073938369751, 'mean': 128.57532143592834, 'stdev': 0.9351088851929302}
+Iteration 1:
+Fine-grained input time difference: 0.5895881652832031
+Fine-grained output time difference: 0.05947470664978027
+
+Iteration 2:
+Fine-grained input time difference: 0.600987434387207
+Fine-grained output time difference: 0.055909156799316406
+
+Iteration 3:
+Fine-grained input time difference: 0.7707185745239258
+Fine-grained output time difference: 0.04329490661621094
+
+Iteration 1:
+[1719895928.0172105, 1719895928.6067986, 1719896056.244004, 1719896056.3034787]
+
+Iteration 2:
+[1719896083.3084288, 1719896083.9094162, 1719896213.41681, 1719896213.4727192]
+
+Iteration 3:
+[1719896242.5555367, 1719896243.3262553, 1719896371.9076204, 1719896371.9509153]
+
+Runtime statistics: {'create_universe_u1': {'min': 0.09641790390014648, 'max': 0.09641790390014648, 'mean': 0.09641790390014648, 'stdev': 0.0}, 'create_universe_u_before_loop': {'min': 0.07892274856567383, 'max': 0.07892274856567383, 'mean': 0.07892274856567383, 'stdev': 0.0}, 'create_universe_u': {'min': 26.5871479511261, 'max': 29.259096384048462, 'mean': 27.52148962020874, 'stdev': 1.5062381008294783}, 'select_atoms': {'min': 0.0018901824951171875, 'max': 0.004584789276123047, 'mean': 0.002816359202067057, 'stdev': 0.0015320801143745345}, 'write_trajectory': {'min': 165.96611428260803, 'max': 165.96611428260803, 'mean': 165.96611428260803, 'stdev': 0.0}, 'com_parallel_dask_total': {'min': 129.91372203826904, 'max': 133.48848843574524, 'mean': 131.23093024889627, 'stdev': 1.9641619733276525}, 'client_compute_time': {'min': 129.66271781921387, 'max': 133.24147701263428, 'mean': 130.9763266245524, 'stdev': 1.970013420992363}, 'calculations_time': {'min': 0.036837100982666016, 'max': 0.04357743263244629, 'mean': 0.04079850514729818, 'stdev': 0.003522315433120681}, 'file_write': {'min': 0.00013566017150878906, 'max': 0.0003256797790527344, 'mean': 0.00020766258239746094, 'stdev': 0.0001030285552390619}}
+Pickle size statistics: {'u_sizes': {'min': 1904285, 'max': 1904285, 'mean': 1904285.0, 'stdev': 0.0}, 'xref0_sizes': {'min': 80379, 'max': 80379, 'mean': 80379.0, 'stdev': 0.0}, 'g_sizes': {'min': 1905521, 'max': 1905521, 'mean': 1905521.0, 'stdev': 0.0}, 'results_sizes': {'min': 13398597, 'max': 13398597, 'mean': 13398597.0, 'stdev': 0.0}}
+Block RMSD statistics: {'min': 129.0248622894287, 'max': 132.47529006004333, 'mean': 130.28069488207498, 'stdev': 1.9071757506212093}
+Iteration 1:
+Fine-grained input time difference: 0.6250765323638916
+Fine-grained output time difference: 0.05777621269226074
+
+Iteration 2:
+Fine-grained input time difference: 0.5845420360565186
+Fine-grained output time difference: 0.053313493728637695
+
+Iteration 3:
+Fine-grained input time difference: 0.7216131687164307
+Fine-grained output time difference: 0.04457378387451172
+
+Iteration 1:
+[1719897233.8403141, 1719897234.4653907, 1719897363.807323, 1719897363.8650992]
+
+Iteration 2:
+[1719897390.8375514, 1719897391.4220934, 1719897520.4469557, 1719897520.5002692]
+
+Iteration 3:
+[1719897550.0133586, 1719897550.7349718, 1719897683.2102618, 1719897683.2548356]
+
+Runtime statistics: {'create_universe_u1': {'min': 0.09574604034423828, 'max': 0.09574604034423828, 'mean': 0.09574604034423828, 'stdev': 0.0}, 'create_universe_u_before_loop': {'min': 0.07884740829467773, 'max': 0.07884740829467773, 'mean': 0.07884740829467773, 'stdev': 0.0}, 'create_universe_u': {'min': 26.277111768722534, 'max': 29.275084733963013, 'mean': 27.730225880940754, 'stdev': 1.501090702848131}, 'select_atoms': {'min': 0.0011930465698242188, 'max': 0.0035207271575927734, 'mean': 0.002263148625691732, 'stdev': 0.0011751105486157902}, 'write_trajectory': {'min': 170.80747961997986, 'max': 170.80747961997986, 'mean': 170.80747961997986, 'stdev': 0.0}, 'com_parallel_dask_total': {'min': 127.47913885116577, 'max': 134.52055978775024, 'mean': 129.8811812400818, 'stdev': 4.018663585943514}, 'client_compute_time': {'min': 127.21742796897888, 'max': 134.2704770565033, 'mean': 129.62786030769348, 'stdev': 4.021611715253144}, 'calculations_time': {'min': 0.0339505672454834, 'max': 0.0405728816986084, 'mean': 0.0382836659749349, 'stdev': 0.003754577936998796}, 'file_write': {'min': 0.0001709461212158203, 'max': 0.0003871917724609375, 'mean': 0.00024708112080891925, 'stdev': 0.00012149159832218498}}
+Pickle size statistics: {'u_sizes': {'min': 1904285, 'max': 1904285, 'mean': 1904285.0, 'stdev': 0.0}, 'xref0_sizes': {'min': 80379, 'max': 80379, 'mean': 80379.0, 'stdev': 0.0}, 'g_sizes': {'min': 1905521, 'max': 1905521, 'mean': 1905521.0, 'stdev': 0.0}, 'results_sizes': {'min': 13398597, 'max': 13398597, 'mean': 13398597.0, 'stdev': 0.0}}
+Block RMSD statistics: {'min': 126.5647931098938, 'max': 133.52740287780762, 'mean': 128.93728319803873, 'stdev': 3.9759142909897918}
+Iteration 1:
+Fine-grained input time difference: 0.5979342460632324
+Fine-grained output time difference: 0.054700613021850586
+
+Iteration 2:
+Fine-grained input time difference: 0.6779842376708984
+Fine-grained output time difference: 0.06508994102478027
+
+Iteration 3:
+Fine-grained input time difference: 0.6239285469055176
+Fine-grained output time difference: 0.0520937442779541
+
+Iteration 1:
+[1719898554.096904, 1719898554.6948383, 1719898681.2596314, 1719898681.314332]
+
+Iteration 2:
+[1719898709.2051892, 1719898709.8831735, 1719898843.4105763, 1719898843.4756663]
+
+Iteration 3:
+[1719898873.0060203, 1719898873.6299489, 1719899000.3496025, 1719899000.4016962]
+
+Runtime statistics: {'create_universe_u1': {'min': 0.11139774322509766, 'max': 0.11139774322509766, 'mean': 0.11139774322509766, 'stdev': 0.0}, 'create_universe_u_before_loop': {'min': 0.08094215393066406, 'max': 0.08094215393066406, 'mean': 0.08094215393066406, 'stdev': 0.0}, 'create_universe_u': {'min': 26.17309331893921, 'max': 28.018951654434204, 'mean': 26.796783049901325, 'stdev': 1.0585041191521094}, 'select_atoms': {'min': 0.001903533935546875, 'max': 0.0034189224243164062, 'mean': 0.0027882258097330728, 'stdev': 0.0007889776688217138}, 'write_trajectory': {'min': 169.82803416252136, 'max': 169.82803416252136, 'mean': 169.82803416252136, 'stdev': 0.0}, 'com_parallel_dask_total': {'min': 129.70741534233093, 'max': 130.53647804260254, 'mean': 130.1122165520986, 'stdev': 0.41487379664201884}, 'client_compute_time': {'min': 129.45163488388062, 'max': 130.29385423660278, 'mean': 129.86377827326456, 'stdev': 0.4213959449631733}, 'calculations_time': {'min': 0.03876972198486328, 'max': 0.04367828369140625, 'mean': 0.0416865348815918, 'stdev': 0.0025817246523222835}, 'file_write': {'min': 0.0001270771026611328, 'max': 0.0003294944763183594, 'mean': 0.00019550323486328125, 'stdev': 0.00011604863615348426}}
+Pickle size statistics: {'u_sizes': {'min': 1904285, 'max': 1904285, 'mean': 1904285.0, 'stdev': 0.0}, 'xref0_sizes': {'min': 80379, 'max': 80379, 'mean': 80379.0, 'stdev': 0.0}, 'g_sizes': {'min': 1905521, 'max': 1905521, 'mean': 1905521.0, 'stdev': 0.0}, 'results_sizes': {'min': 13398597, 'max': 13398597, 'mean': 13398597.0, 'stdev': 0.0}}
+Block RMSD statistics: {'min': 128.7689127922058, 'max': 129.48457527160645, 'mean': 129.1535041332245, 'stdev': 0.3608205997073512}
+Iteration 1:
+Fine-grained input time difference: 0.6307857036590576
+Fine-grained output time difference: 0.05193638801574707
+
+Iteration 2:
+Fine-grained input time difference: 0.5880675315856934
+Fine-grained output time difference: 0.05075383186340332
+
+Iteration 3:
+Fine-grained input time difference: 0.7603945732116699
+Fine-grained output time difference: 0.04888439178466797
+
+Iteration 1:
+[1719899871.648318, 1719899872.2791038, 1719900001.0480165, 1719900001.099953]
+
+Iteration 2:
+[1719900027.549827, 1719900028.1378946, 1719900157.344919, 1719900157.3956728]
+
+Iteration 3:
+[1719900185.6631668, 1719900186.4235613, 1719900315.9081366, 1719900315.957021]
+

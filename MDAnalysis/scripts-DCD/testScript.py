@@ -134,7 +134,7 @@ if __name__ == "__main__":
         report_filename = 'report_PS.html'
         stats_filename = 'stats_PS.txt'
     else:
-        data_filename = 'data_PS.txt'
+        data_filename = 'data.txt'
         report_filename = 'report.html'
         stats_filename = 'stats.txt'
 
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     PSF, DCD1 = ["adk4AKE.psf", "1ake_007-nowater-core-dt240ps.dcd"]
 
     num_cores = multiprocessing.cpu_count()
-    client = Client(n_workers=num_cores)
+    client = Client(n_workers=8)
     dask.config.set(scheduler='distributed')
 
     store = None
@@ -166,7 +166,7 @@ if __name__ == "__main__":
     all_finegrained_times = []
 
     with open(data_filename, 'a') as file:
-        with performance_report(filename="report_filename):
+        with performance_report(filename=report_filename):
             for k in traj_sizes:
                 # Creating the universe for doing benchmark
                 start_time_u1 = time.time()

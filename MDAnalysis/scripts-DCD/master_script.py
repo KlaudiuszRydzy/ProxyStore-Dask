@@ -4,7 +4,7 @@ import os
 import shutil
 
 def run_script(traj_size, block_size, iterations, num_traj_sizes, master_iterations):
-    script_name = 'testScript.py'  # Replace with the name of your existing script
+    script_name = 'testScript.py'
 
     proxystore_dir = 'results_proxystore'
     non_proxystore_dir = 'results_non_proxystore'
@@ -21,12 +21,7 @@ def run_script(traj_size, block_size, iterations, num_traj_sizes, master_iterati
         command = f'python {script_name} --traj_size {traj_size} --block_size {block_size} --iterations {iterations} --num_traj_sizes {num_traj_sizes} --proxystore'
         subprocess.run(command, shell=True)
 
-        # Move result files to ProxyStore directory
-        for file in os.listdir('.'):
-            if file.startswith('data_PS') or file.startswith('report_PS') or file.startswith('stats_PS'):
-                shutil.move(file, os.path.join(proxystore_dir, file))
-
-        # Clean up the resultant newtraj.dcd files after each master iteration
+        # Clean up the resultant newtraj.dcd files
         for file in os.listdir('.'):
             if file.startswith('newtraj') and file.endswith('.dcd'):
                 os.remove(file)
@@ -36,15 +31,20 @@ def run_script(traj_size, block_size, iterations, num_traj_sizes, master_iterati
         command = f'python {script_name} --traj_size {traj_size} --block_size {block_size} --iterations {iterations} --num_traj_sizes {num_traj_sizes}'
         subprocess.run(command, shell=True)
 
-        # Move result files to non-ProxyStore directory
-        for file in os.listdir('.'):
-            if file.startswith('data') or file.startswith('report') or file.startswith('stats'):
-                shutil.move(file, os.path.join(non_proxystore_dir, file))
-
-        # Clean up the resultant newtraj.dcd files after each master iteration
+        # Clean up the resultant newtraj.dcd files
         for file in os.listdir('.'):
             if file.startswith('newtraj') and file.endswith('.dcd'):
                 os.remove(file)
+
+    # Move result files to ProxyStore directory
+    for file in os.listdir('.'):
+        if file in ['data_PS.txt', 'report_PS.html', 'stats_PS.txt']:
+            shutil.move(file, os.path.join(proxystore_dir, file))
+
+    # Move result files to non-ProxyStore directory
+    for file in os.listdir('.'):
+        if file in ['data.txt', 'report.html', 'stats.txt']:
+            shutil.move(file, os.path.join(non_proxystore_dir, file))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Run multiple instances of the existing script with and without ProxyStore.')
