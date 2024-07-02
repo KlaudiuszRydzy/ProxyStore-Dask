@@ -149,13 +149,10 @@ if __name__ == "__main__":
     num_cores = multiprocessing.cpu_count()
     client = Client(n_workers=8)
     dask.config.set(scheduler='distributed')
-    # Register Scheduler Plugin
-    scheduler_plugin = TaskTimingPlugin()
-    client.register_scheduler_plugin(scheduler_plugin)
 
-    # Register Worker Plugin
-    worker_plugin = WorkerTimingPlugin()
-    client.register_worker_plugin(worker_plugin)
+    # Register Plugins
+    client.run_on_scheduler(lambda dask_scheduler: dask_scheduler.add_plugin(TaskTimingPlugin(dask_scheduler)))
+    client.register_plugin(WorkerTimingPlugin(), 'worker')
 
     store = None
     if use_proxystore:

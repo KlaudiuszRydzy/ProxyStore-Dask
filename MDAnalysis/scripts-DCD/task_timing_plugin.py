@@ -1,12 +1,15 @@
-from dask.distributed import Client, SchedulerPlugin, WorkerPlugin
+from dask.distributed import SchedulerPlugin, WorkerPlugin
 import logging
 import time
 
 class TaskTimingPlugin(SchedulerPlugin):
-    def __init__(self):
+    def __init__(self, scheduler):
+        self.scheduler = scheduler
         self.task_durations = {}
 
-    def transition(self, key, start, finish, *args, **kwargs):
+    def transition(self, key, start, finish, *args, stimulus_id, **kwargs):
+        ts = self.scheduler.tasks[key]  # Get full TaskState
+        print(f"Scheduler Transition: {key} from {start} to {finish}")
         if start == 'released' and finish == 'waiting':
             self.task_durations[key] = {'submitted': time.time()}
         elif start == 'processing' and finish == 'memory':
@@ -26,7 +29,8 @@ class WorkerTimingPlugin(WorkerPlugin):
     def setup(self, worker):
         self.worker = worker
 
-    def transition(self, key, start, finish, *args, **kwargs):
+    def transition(self, key, start, finish, *args, stimulus_id, **kwargs):
+        print(f"Worker Transition: {key} from {start} to {finish}")
         if start == 'waiting' and finish == 'ready':
             self.task_durations[key] = {'received_by_worker': time.time()}
         elif start == 'executing' and finish == 'memory':
