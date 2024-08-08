@@ -1,0 +1,226 @@
+[
+    {
+        "type": "Python List",
+        "size": 1024,
+        "avg_ser_time": 1.8870830535888673e-05,
+        "std_ser_time": 6.49347466212602e-05,
+        "avg_des_time": 1.6200542449951173e-05,
+        "std_des_time": 5.574629550210873e-05
+    },
+    {
+        "type": "NumPy Array",
+        "size": 1024,
+        "avg_ser_time": 1.4591217041015626e-05,
+        "std_ser_time": 9.808715360690677e-06,
+        "avg_des_time": 5.069971084594727e-05,
+        "std_des_time": 7.074724444375202e-05
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 1024,
+        "avg_ser_time": 4.559755325317383e-05,
+        "std_ser_time": 5.994399149455034e-05,
+        "avg_des_time": 4.694461822509766e-05,
+        "std_des_time": 2.1867533203140975e-05
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 1024,
+        "avg_ser_time": 0.000293421745300293,
+        "std_ser_time": 0.0012135808241600394,
+        "avg_des_time": 0.0002070188522338867,
+        "std_des_time": 0.000776778192007693
+    },
+    {
+        "type": "Python List",
+        "size": 10240,
+        "avg_ser_time": 1.7178058624267577e-05,
+        "std_ser_time": 9.756972672767832e-07,
+        "avg_des_time": 1.531839370727539e-05,
+        "std_des_time": 1.548574096771071e-06
+    },
+    {
+        "type": "NumPy Array",
+        "size": 10240,
+        "avg_ser_time": 1.3089179992675781e-05,
+        "std_ser_time": 3.7210869917678927e-06,
+        "avg_des_time": 3.612041473388672e-05,
+        "std_des_time": 8.4288639248229e-06
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 10240,
+        "avg_ser_time": 3.263950347900391e-05,
+        "std_ser_time": 8.717093202377702e-06,
+        "avg_des_time": 4.1985511779785155e-05,
+        "std_des_time": 1.1415470612472083e-05
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 10240,
+        "avg_ser_time": 1.5544891357421876e-05,
+        "std_ser_time": 2.913783286562384e-06,
+        "avg_des_time": 1.1336803436279296e-05,
+        "std_des_time": 2.8565242286600397e-06
+    },
+    {
+        "type": "Python List",
+        "size": 102400,
+        "avg_ser_time": 0.00015109777450561523,
+        "std_ser_time": 7.79431869424702e-07,
+        "avg_des_time": 0.00011985301971435547,
+        "std_des_time": 2.999813600851646e-06
+    },
+    {
+        "type": "NumPy Array",
+        "size": 102400,
+        "avg_ser_time": 1.8298625946044922e-05,
+        "std_ser_time": 3.4876612641535524e-06,
+        "avg_des_time": 4.6753883361816405e-05,
+        "std_des_time": 2.618449344247888e-05
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 102400,
+        "avg_ser_time": 3.465414047241211e-05,
+        "std_ser_time": 5.472874984117435e-06,
+        "avg_des_time": 4.475116729736328e-05,
+        "std_des_time": 6.2818205806407375e-06
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 102400,
+        "avg_ser_time": 2.7883052825927735e-05,
+        "std_ser_time": 9.111357141870795e-06,
+        "avg_des_time": 3.3867359161376956e-05,
+        "std_des_time": 4.864834563903511e-06
+    },
+    {
+        "type": "Python List",
+        "size": 1048576,
+        "avg_ser_time": 0.0015444993972778321,
+        "std_ser_time": 4.000091824439689e-05,
+        "avg_des_time": 0.0012028098106384277,
+        "std_des_time": 7.018341911040564e-05
+    },
+    {
+        "type": "NumPy Array",
+        "size": 1048576,
+        "avg_ser_time": 0.00015250444412231445,
+        "std_ser_time": 6.811386703786845e-05,
+        "avg_des_time": 0.00016231536865234374,
+        "std_des_time": 3.9417203693455595e-05
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 1048576,
+        "avg_ser_time": 0.00014802217483520508,
+        "std_ser_time": 6.913922055727855e-05,
+        "avg_des_time": 9.332895278930664e-05,
+        "std_des_time": 2.903067827520387e-05
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 1048576,
+        "avg_ser_time": 0.00024427175521850585,
+        "std_ser_time": 0.00010405684516698214,
+        "avg_des_time": 0.00046689510345458983,
+        "std_des_time": 0.00033840717805886235
+    },
+    {
+        "type": "Python List",
+        "size": 10485760,
+        "avg_ser_time": 0.015786349773406982,
+        "std_ser_time": 0.0004539061090509888,
+        "avg_des_time": 0.016734135150909425,
+        "std_des_time": 0.00446653025239191
+    },
+    {
+        "type": "NumPy Array",
+        "size": 10485760,
+        "avg_ser_time": 0.0017920613288879394,
+        "std_ser_time": 0.0009163249053381235,
+        "avg_des_time": 0.0014969706535339355,
+        "std_des_time": 0.0004967860479801313
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 10485760,
+        "avg_ser_time": 0.0011143445968627929,
+        "std_ser_time": 0.000368769176337433,
+        "avg_des_time": 0.002847921848297119,
+        "std_des_time": 0.00048697411486945064
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 10485760,
+        "avg_ser_time": 0.003285515308380127,
+        "std_ser_time": 0.0006164313283655382,
+        "avg_des_time": 0.005739462375640869,
+        "std_des_time": 0.0001815926728893501
+    },
+    {
+        "type": "Python List",
+        "size": 104857600,
+        "avg_ser_time": 0.1634935975074768,
+        "std_ser_time": 0.007209819160667722,
+        "avg_des_time": 0.1458860993385315,
+        "std_des_time": 0.0077758894449089155
+    },
+    {
+        "type": "NumPy Array",
+        "size": 104857600,
+        "avg_ser_time": 0.028654146194458007,
+        "std_ser_time": 0.007432464907791815,
+        "avg_des_time": 0.027973616123199464,
+        "std_des_time": 0.012428852940294633
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 104857600,
+        "avg_ser_time": 0.013102495670318603,
+        "std_ser_time": 0.006447554796749983,
+        "avg_des_time": 0.03265732526779175,
+        "std_des_time": 0.0037065709874248365
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 104857600,
+        "avg_ser_time": 0.05353614091873169,
+        "std_ser_time": 0.03840623465586473,
+        "avg_des_time": 0.060514533519744874,
+        "std_des_time": 0.007313025135000043
+    },
+    {
+        "type": "Python List",
+        "size": 1073741824,
+        "avg_ser_time": 2.0291042923927307,
+        "std_ser_time": 0.14716411556767062,
+        "avg_des_time": 1.9837142467498778,
+        "std_des_time": 0.11801039220612758
+    },
+    {
+        "type": "NumPy Array",
+        "size": 1073741824,
+        "avg_ser_time": 3.5225825667381288,
+        "std_ser_time": 2.784250072381372,
+        "avg_des_time": 1.4745725989341736,
+        "std_des_time": 1.1501598465106557
+    },
+    {
+        "type": "Pandas DataFrame",
+        "size": 1073741824,
+        "avg_ser_time": 5.139375102519989,
+        "std_ser_time": 2.831213855131738,
+        "avg_des_time": 1.5302393436431885,
+        "std_des_time": 1.034586608283431
+    },
+    {
+        "type": "Polars DataFrame",
+        "size": 1073741824,
+        "avg_ser_time": 7.680824875831604,
+        "std_ser_time": 2.120517647246168,
+        "avg_des_time": 2.2951093912124634,
+        "std_des_time": 0.33886825793801967
+    }
+]

@@ -1,0 +1,40 @@
+version = "0.2.1.dev1"
+
+[app]
+name = "fedlearn"
+alpha = 100000.0
+dataset = "mnist"
+data_dir = "/home/cc/taps/data/fedlearn"
+device = "cpu"
+clients = 16
+rounds = 3
+participation = 1.0
+epochs = 1
+lr = 0.001
+batch_size = 32
+train = true
+test = true
+
+[engine]
+task_record_file_name = "tasks.jsonl"
+
+[engine.executor]
+name = "dask"
+use_threads = false
+daemon_workers = true
+
+[engine.filter]
+name = "all"
+
+[engine.transformer]
+name = "null"
+
+[logging]
+level = "INFO"
+file_level = "INFO"
+file_name = "log.txt"
+
+[run]
+dir_format = "runs/{name}_{executor}_{timestamp}"
+
+[run.env_vars]

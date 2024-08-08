@@ -1,0 +1,65 @@
+[2024-07-30 20:45:10.507] RUN   (taps.run) :: CLI Arguments: --app fedlearn --app.clients 16 --app.batch-size 32 --app.epochs 1 --app.participation 1 --engine.executor dask
+[2024-07-30 20:45:10.517] RUN   (taps.run) :: Environment:
+host: proxystore-benchmark
+  os: linux (Linux-5.4.0-174-generic-x86_64-with-glibc2.29)
+  cpu: x86_64 (24 cores / 48 logical)
+  memory: 198.64 GB
+python:
+  version: 3.8.10
+  build: CPython (64-bit runtime) [GCC 9.4.0]
+  taps: 0.2.1.dev1
+[2024-07-30 20:45:10.517] RUN   (taps.run) :: Starting app (name=fedlearn)
+[2024-07-30 20:45:10.517] RUN   (taps.run) :: Configuration:
+app:
+  name: 'fedlearn'
+  alpha: 100000.0
+  batch_size: 32
+  clients: 16
+  data_dir: '/home/cc/taps/data/fedlearn'
+  dataset: 'mnist'
+  device: 'cpu'
+  epochs: 1
+  lr: 0.001
+  participation: 1.0
+  rounds: 3
+  seed: None
+  test: True
+  train: True
+engine:
+  executor:
+    name: 'dask'
+    daemon_workers: True
+    scheduler: None
+    use_threads: False
+    workers: None
+  filter:
+    name: 'all'
+  task_record_file_name: 'tasks.jsonl'
+  transformer:
+    name: 'null'
+logging:
+  file_level: 'INFO'
+  file_name: 'log.txt'
+  level: 'INFO'
+run:
+  dir_format: 'runs/{name}_{executor}_{timestamp}'
+  env_vars:
+version: '0.2.1.dev1'
+[2024-07-30 20:45:10.517] RUN   (taps.run) :: Runtime directory: runs/fedlearn_dask_2024-07-30-20-45-10
+[2024-07-30 20:45:19.986] APP   (taps.apps.fedlearn.app) :: Created 16 clients
+[2024-07-30 20:45:20.678] APP   (taps.apps.fedlearn.app) :: (1/3) Starting local training for this round
+[2024-07-30 20:48:12.350] APP   (taps.apps.fedlearn.app) :: (1/3) Finished local training
+[2024-07-30 20:48:12.470] APP   (taps.apps.fedlearn.app) :: (1/3) Averaged the returned locally trained models
+[2024-07-30 20:48:12.494] APP   (taps.apps.fedlearn.app) :: (1/3) Starting the test for the global model
+[2024-07-30 20:48:27.927] APP   (taps.apps.fedlearn.app) :: (1/3) Finished testing with test_loss=2.305
+[2024-07-30 20:48:27.930] APP   (taps.apps.fedlearn.app) :: (2/3) Starting local training for this round
+[2024-07-30 20:51:13.517] APP   (taps.apps.fedlearn.app) :: (2/3) Finished local training
+[2024-07-30 20:51:13.597] APP   (taps.apps.fedlearn.app) :: (2/3) Averaged the returned locally trained models
+[2024-07-30 20:51:13.638] APP   (taps.apps.fedlearn.app) :: (2/3) Starting the test for the global model
+[2024-07-30 20:51:29.276] APP   (taps.apps.fedlearn.app) :: (2/3) Finished testing with test_loss=2.305
+[2024-07-30 20:51:29.277] APP   (taps.apps.fedlearn.app) :: (3/3) Starting local training for this round
+[2024-07-30 20:54:15.449] APP   (taps.apps.fedlearn.app) :: (3/3) Finished local training
+[2024-07-30 20:54:15.518] APP   (taps.apps.fedlearn.app) :: (3/3) Averaged the returned locally trained models
+[2024-07-30 20:54:15.554] APP   (taps.apps.fedlearn.app) :: (3/3) Starting the test for the global model
+[2024-07-30 20:54:32.422] APP   (taps.apps.fedlearn.app) :: (3/3) Finished testing with test_loss=2.305
+[2024-07-30 20:54:33.336] RUN   (taps.run) :: Finished app (name=fedlearn, runtime=562.82s, tasks=51)
